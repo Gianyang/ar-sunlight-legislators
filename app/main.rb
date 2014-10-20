@@ -1,6 +1,7 @@
 require_relative '../app/models/person'
 
 
+
 # def find_by_state
 #   # require relative "app"
 #     org = Person.where(state: "AL")
@@ -42,25 +43,57 @@ def gender_actively_in_office
     end
   end
 
-men_in_office = 0
-women_in_office= 0
+rep_men_in_office = 0
+rep_women_in_office= 0
 
   rep.each do |p|
     if p.gender == "M"
-      men_in_office += 1
+      rep_men_in_office += 1
     else
-      women_in_office += 1
+      rep_women_in_office += 1
     end
   end
-percentage = 0.0
-percentage = (men_in_office.to_f/in_office.length)
+rep_percentage = (rep_men_in_office.to_f/(rep_men_in_office +rep_women_in_office))
 
-puts percentage
-puts men_in_office
-puts "total #{in_office.length} "
-puts "there are " + (percentage*100).to_s + "% men in office."
+
+
+puts "There are " + (rep_percentage*100).to_s + "% men in rep office."
+
+
+
+sen_men_in_office = 0
+sen_women_in_office= 0
+
+  sen.each do |p|
+    if p.gender == "M"
+      sen_men_in_office += 1
+    else
+      sen_women_in_office += 1
+    end
+  end
+sen_percentage = (sen_men_in_office.to_f/(sen_men_in_office +sen_women_in_office))
+
+
+
+puts "There are " + (sen_percentage*100).to_s + "% men in sen office."
 
 
 
 end
-gender_actively_in_office
+# gender_actively_in_office
+
+def states_with_rep
+  active_in_office = Person.group('state').where(in_office: 1).count
+  active_in_office = active_in_office.sort_by {|key, count| count}.reverse
+
+   active_in_office.each do |key, value|
+    sen = Person.where(state: key).where(title: "Sen") .count
+    p "#{key} :#{sen} is senator #{value - sen} is rep."
+   end
+end
+
+states_with_rep
+
+# Person.new = state(CreatePeople)
+# state = []
+# puts state.where(title: 'Rep').count
