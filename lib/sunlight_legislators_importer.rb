@@ -1,17 +1,27 @@
 require 'csv'
+require_relative '../app/models/person'
 
 class SunlightLegislatorsImporter
   def self.import(filename)
     csv = CSV.new(File.open(filename), :headers => true)
     csv.each do |row|
+      # test = person.new
+      tempdata = {}
       row.each do |field, value|
+        # test.send {field, value}
+        tempdata[field] = value
+        # test.save
         # TODO: begin
-        raise NotImplementedError, "TODO: figure out what to do with this row and do it!"
+        # raise NotImplementedError, "TODO: figure out what to do with this row and do it!"
         # TODO: end
       end
+      Person.create(tempdata)
     end
   end
 end
+
+# puts field
+
 
 # IF YOU WANT TO HAVE THIS FILE RUN ON ITS OWN AND NOT BE IN THE RAKEFILE, UNCOMMENT THE BELOW
 # AND RUN THIS FILE FROM THE COMMAND LINE WITH THE PROPER ARGUMENT.

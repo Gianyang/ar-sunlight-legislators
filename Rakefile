@@ -1,5 +1,6 @@
 require 'rake'
 require 'rspec/core/rake_task'
+require_relative 'lib/sunlight_legislators_importer'
 require_relative 'db/config'
 
 
@@ -22,6 +23,25 @@ task "db:migrate" do
   end
 end
 
+desc "Find find_by_name"
+task "db:find_by_name" do
+  # require relative "app"
+    org = Person.find_by  firstname: 'David'
+    puts org.lastname
+ end
+
+
+desc "populate the test database with sample data"
+task "db:populate" do
+  SunlightLegislatorsImporter.import(File.dirname(__FILE__) + "/db/data/legislators.csv")
+end
+
+
+# desc 'Pulls data from CSV file'
+# task "db:seed" do
+#   SunlightLegislatorsImporter.import(File.dirname(__FILE__) + "/db/data/legislators.csv")
+# end
+
 desc 'Retrieves the current schema version number'
 task "db:version" do
   puts "Current version: #{ActiveRecord::Migrator.current_version}"
@@ -31,3 +51,4 @@ desc "Run the specs"
 RSpec::Core::RakeTask.new(:specs)
 
 task :default  => :specs
+
