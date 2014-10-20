@@ -1,99 +1,30 @@
-require_relative '../app/models/person'
+require 'twitter'
 
-
-
-# def find_by_state
-#   # require relative "app"
-#     org = Person.where(state: "AL")
-#     sen = []
-#     rep = []
-#     org.each do |p|
-#       if p.title == "Sen"
-#         sen << p
-#       else
-#         rep << p
-#       end
-#     end
-
-#     sen.sort_by! do |x|
-#       x[:lastname]
-#     end
-
-#     rep.sort_by! do |x|
-#       x[:lastname]
-#     end
-
-#     sen.each do |p|
-#       puts  "#{p.title} #{p.firstname} #{p.lastname} (#{p.party}) #{p.id}"
-#     end
-#     rep.each do |p|
-#       puts  "#{p.title} #{p.firstname} #{p.lastname} (#{p.party}) #{p.id}"
-#     end
-# end
-
-def gender_actively_in_office
-  in_office = Person.where(in_office: 1)
-  sen = []
-  rep = []
-  in_office.each do |p|
-    if p.title == "Sen"
-      sen << p
-    else
-      rep << p
-    end
-  end
-
-rep_men_in_office = 0
-rep_women_in_office= 0
-
-  rep.each do |p|
-    if p.gender == "M"
-      rep_men_in_office += 1
-    else
-      rep_women_in_office += 1
-    end
-  end
-rep_percentage = (rep_men_in_office.to_f/(rep_men_in_office +rep_women_in_office))
-
-
-
-puts "There are " + (rep_percentage*100).to_s + "% men in rep office."
-
-
-
-sen_men_in_office = 0
-sen_women_in_office= 0
-
-  sen.each do |p|
-    if p.gender == "M"
-      sen_men_in_office += 1
-    else
-      sen_women_in_office += 1
-    end
-  end
-sen_percentage = (sen_men_in_office.to_f/(sen_men_in_office +sen_women_in_office))
-
-
-
-puts "There are " + (sen_percentage*100).to_s + "% men in sen office."
-
-
-
-end
-# gender_actively_in_office
-
-def states_with_rep
-  active_in_office = Person.group('state').where(in_office: 1).count
-  active_in_office = active_in_office.sort_by {|key, count| count}.reverse
-
-   active_in_office.each do |key, value|
-    sen = Person.where(state: key).where(title: "Sen") .count
-    p "#{key} :#{sen} is senator #{value - sen} is rep."
-   end
+client = Twitter::REST::Client.new do |config|
+  config.consumer_key        = "lwzCupQNN198QC0ueZSYoMdx5"
+  config.consumer_secret     = "KuEcbye6tkfWvG5we8gngiPACOYSGSWFyZs8C4sF8X11FHfsBQ"
+  config.access_token        = "421145010-8cFZmIkwqBUZ2GzqLWyxKs3ysdzcTmdPlxJptJeT"
+  config.access_token_secret = "82XqLYxOrv8lWtlTPRYoOKUemopKLHCiXXkrNGBv1tn5T"
 end
 
-states_with_rep
+# client.update("I'm tweeting with @gem!")
 
-# Person.new = state(CreatePeople)
-# state = []
-# puts state.where(title: 'Rep').count
+
+# puts Person.twitter_id.where(id: 1)
+
+# client.user("gem")
+# tweets = client.user("repgaryackerman")
+# p tweets
+
+# client.followers("gem")
+# client.followers(92102359)
+twitter_id = {
+              1 => "neilabercrombie", 2 => "repgaryackerman"            , 3 => "Robert_Aderholt", 4 => "RepAndrews", 5            => "ToddAkin", 6 => "USRepAlexander", 7 => "            RepJasonAltmire", 8 => "SteveAustria", 9 => "            MarkAmodeiNV2", 10 => "BachusAL06"
+             }
+
+twitter_id.each do |key,value|
+client.user_timeline(value).each do |tweet|
+  puts tweet.text
+end
+
+
